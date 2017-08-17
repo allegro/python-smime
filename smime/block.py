@@ -55,7 +55,7 @@ class AES(BlockCipher):
 
     @staticmethod
     def _pad(s, block_size):
-        n = block_size - len(s) % block_size
+        n = block_size - len(s.encode('utf-8')) % block_size
         return s + n * chr(n)
 
     @property
