@@ -42,7 +42,7 @@ class AES(BlockCipher):
         return self._session_key
 
     def encrypt(self, data):
-        padded_data = self._pad(data, self.block_size)
+        padded_data = self._pad(data, self.block_size).encode('utf-8') 
         encrypted_content = self._cipher.encrypt(padded_data)
         return {
             'content_type': 'data',
