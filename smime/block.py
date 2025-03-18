@@ -6,6 +6,7 @@ import os
 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding as cryptography_padding
 
 from abc import ABCMeta, abstractmethod
 
@@ -47,8 +48,9 @@ class AES(BlockCipher):
         return self._session_key
 
     def encrypt(self, data):
-        padded_data = self._pad(data, self.block_size)
-        encrypted_content = self._encryptor.update(padded_data.encode('utf-8')) + self._encryptor.finalize()
+        padder = cryptography_padding.PKCS7(128).padder()
+        padded_data = padder.update(data.encode("utf-8")) + padder.finalize()
+        encrypted_content = self._encryptor.update(padded_data) + self._encryptor.finalize()
         return {
             'content_type': 'data',
             'content_encryption_algorithm': {
@@ -57,11 +59,6 @@ class AES(BlockCipher):
             },
             'encrypted_content': encrypted_content
         }
-
-    @staticmethod
-    def _pad(s, block_size):
-        n = block_size - len(s.encode('utf-8')) % block_size
-        return s + n * chr(n)
 
     @property
     def parameters(self):
