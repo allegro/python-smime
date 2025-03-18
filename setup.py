@@ -37,6 +37,6 @@ setup(
     platforms=["all"],
     install_requires=[
         'cryptography',
-        'asn1crypto @ git+https://github.com/wbond/asn1crypto.git@1.5.1#egg=asn1crypto'
+        'asn1crypto @ git+https://github.com/wbond/asn1crypto.git'
     ],
 )
